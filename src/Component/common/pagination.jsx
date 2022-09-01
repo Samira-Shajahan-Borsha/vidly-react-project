@@ -3,11 +3,15 @@ import PropTypes from "prop-types";
 import _ from 'lodash';
 
 const Pagination = (props) => {
+
     const {itemsCount , pageSize, currentPage, onPageChange} = props;
-    const pagesCount = Math.ceil(itemsCount/pageSize);
-    // console.log(pagesCount);
+    
+    const pagesCount = Math.ceil(itemsCount/pageSize);//3.8->4
+    
     if(pagesCount === 1) return null;
-    const pages = _.range(1, pagesCount + 1); //this function returns an array
+    
+    const pages = _.range(1, pagesCount + 1);//[1, 2, 3]
+
     
     return ( 
         <nav>
@@ -23,8 +27,16 @@ const Pagination = (props) => {
         </nav>
      );
 }
+
+
 Pagination.propTypes = {
-    itemsCount: PropTypes.number.isRequired, pageSize: PropTypes.number.isRequired, currentPage: PropTypes.number.isRequired, onPageChange: PropTypes.func.isRequired
+
+    itemsCount: PropTypes.number.isRequired, 
+    pageSize: PropTypes.number.isRequired, 
+    currentPage: PropTypes.number.isRequired,
+    onPageChange: PropTypes.func.isRequired
+
 };
+
 
 export default Pagination;
