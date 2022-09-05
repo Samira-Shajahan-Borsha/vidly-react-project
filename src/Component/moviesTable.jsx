@@ -1,21 +1,30 @@
-import React from 'react';
+import React, { Component } from 'react';
+import TableHeader from './common/tableHeader';
 import Like from "./common/like";
 
-const MoviesTable = (props) => {
-    const {movies, onLike, onDelete} = props;
+
+class MoviesTable extends Component {
+
+    columns = [
+
+        {path: 'title', label: 'Title'},
+        {path: 'genre.name', label: 'Genre'},
+        {path: 'numberInStock', label: 'Stock'},
+        {path: 'dailyRentalRate', label: 'Rate'},
+        {key: 'Like'},
+        {key: 'delete'} 
+
+    ];
+
+    render() { 
+
+        const {movies, onLike, onDelete, onSort, sortColumn} = this.props;
 
     return ( 
         <table className="table">
-            <thead>
-                <tr>
-                    <th>Title</th>
-                    <th>Genre</th>
-                    <th>Stock</th>
-                    <th>Rate</th>
-                    <th />
-                    <th />
-                </tr>
-            </thead>
+
+            <TableHeader columns={this.columns} sortColumn={sortColumn} onSort={onSort}/>
+
             <tbody>
                 {movies.map(movie => (
                     <tr key={movie._id}>
@@ -32,8 +41,9 @@ const MoviesTable = (props) => {
                     </tr>
                 ))}
             </tbody>
+            
         </table>
      );
+    }
 }
- 
 export default MoviesTable;
