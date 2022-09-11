@@ -7,8 +7,10 @@ import Customers from "./Component/customers";
 import Rentals from "./Component/rentals";
 import NavBar from "./Component/navbar";
 import MovieForm from './Component/movieForm';
+import LoginForm from './Component/loginForm';
 
 import "./App.css";
+
 
 
 class App extends Component {
@@ -18,6 +20,7 @@ class App extends Component {
         <NavBar />
         <main className="container">
           <Switch>
+            <Route path="/login" component={LoginForm} />
             <Route path="/movies/:id" component={MovieForm} />
             <Route path="/movies" component={Movies} />
             <Route path="/customers" component={Customers} />
