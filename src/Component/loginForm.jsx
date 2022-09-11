@@ -1,26 +1,76 @@
 import React, { Component } from "react";
+import Input from "./common/input";
 
 class LoginForm extends Component {
+  state = {
+    account: { username: "", password: "" },
+    errors: {}
+  };
+
+  //   username = React.createRef();
+  /* componentDidMount(){
+        this.username.current.focus();
+      } */
+
+  validate = () => {
+    const errors = {};
+
+    const { account } = this.state;
+
+    if (account.username.trim() === "") {
+      errors.username = "Username is required";
+    }
+    
+    if (account.password.trim() === "") {
+      errors.password = "Password is required";
+    }
+
+    return Object.keys(errors).length === 0 ? null : errors;
+  };
+
   handleSubmit = (e) => {
     e.preventDefault();
-    
+
+    const errors = this.validate();
+    console.log(errors);
+    this.setState({ errors });
+    if (errors) return;
+
     //Call the server
-    console.log("Submitted");
+    // const username = this.username.current.value;
+    // console.log("Submitted");
   };
+
+  handleChange = ({ currentTarget: input }) => {
+    const account = { ...this.state.account };
+    account[input.name] = input.value;
+    this.setState({ account });
+  };
+
   render() {
+    const { account } = this.state;
+
     return (
       <div>
         <h1 className="mb-4">Login</h1>
-        <form onSubmit={this.handleSubmit}>
-          <div className="form- mb-4">
-            <label htmlFor="username">Username</label>
-            <input id="username" type="text" className="form-control" />
+        <form onSubmit={this.handleSubmit} className="row row-cols-1">
+          <Input
+            name="username"
+            value={account.username}
+            label="Username"
+            onChange={this.handleChange}
+          />
+
+          <Input
+            name="password"
+            value={account.password}
+            label="Password"
+            onChange={this.handleChange}
+          />
+
+          <div className="col">
+            <button className="btn btn-primary col-2">Login</button>
           </div>
-          <div className="form- mb-4">
-            <label htmlFor="password">Password</label>
-            <input id="password" type="text" className="form-control" />
-          </div>
-          <button className="btn btn-primary">Login</button>
         </form>
       </div>
     );
