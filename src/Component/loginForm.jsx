@@ -4,7 +4,7 @@ import Input from "./common/input";
 class LoginForm extends Component {
   state = {
     account: { username: "", password: "" },
-    errors: {}
+    errors: {},
   };
 
   //   username = React.createRef();
@@ -16,11 +16,9 @@ class LoginForm extends Component {
     const errors = {};
 
     const { account } = this.state;
-
     if (account.username.trim() === "") {
       errors.username = "Username is required";
     }
-    
     if (account.password.trim() === "") {
       errors.password = "Password is required";
     }
@@ -33,12 +31,12 @@ class LoginForm extends Component {
 
     const errors = this.validate();
     console.log(errors);
-    this.setState({ errors });
+    this.setState({ errors: errors || {} });
     if (errors) return;
 
     //Call the server
     // const username = this.username.current.value;
-    // console.log("Submitted");
+    console.log("Submitted");
   };
 
   handleChange = ({ currentTarget: input }) => {
@@ -48,17 +46,18 @@ class LoginForm extends Component {
   };
 
   render() {
-    const { account } = this.state;
+    const { account,errors } = this.state;
 
     return (
       <div>
         <h1 className="mb-4">Login</h1>
-        <form onSubmit={this.handleSubmit} className="row row-cols-1">
+        <form onSubmit={this.handleSubmit} className="row row-cols-2 mt-5">
           <Input
             name="username"
             value={account.username}
             label="Username"
             onChange={this.handleChange}
+            error={errors.username}
           />
 
           <Input
@@ -66,6 +65,7 @@ class LoginForm extends Component {
             value={account.password}
             label="Password"
             onChange={this.handleChange}
+            error={errors.password}
           />
 
           <div className="col">
