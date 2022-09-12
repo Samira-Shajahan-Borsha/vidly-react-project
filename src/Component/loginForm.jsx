@@ -1,5 +1,7 @@
 import React, { Component } from "react";
+import Joi from "joi-browser";
 import Input from "./common/input";
+
 
 class LoginForm extends Component {
   state = {
@@ -7,23 +9,35 @@ class LoginForm extends Component {
     errors: {},
   };
 
+  schema = {
+    username: Joi.string().required().label("Username"),
+    password: Joi.string().required().label("Password"),
+  };
+
   //   username = React.createRef();
   /* componentDidMount(){
         this.username.current.focus();
-      } */
+    } */
 
   validate = () => {
+    const option = { abortEarly: false };
+    const { error } = Joi.validate(this.state.account, this.schema, option);
+
+    if (!error) return null;
+
     const errors = {};
 
-    const { account } = this.state;
-    if (account.username.trim() === "") {
-      errors.username = "Username is required";
+    for (let item of error.details) {
+      errors[item.path[0]] = item.message;
     }
-    if (account.password.trim() === "") {
-      errors.password = "Password is required";
-    }
+    return errors;
+  };
 
-    return Object.keys(errors).length === 0 ? null : errors;
+  validateProperty = ({ name, value }) => {
+    const obj = { [name]: value };
+    const schema = { [name]: this.schema[name] };
+    const { error } = Joi.validate(obj, schema);
+    return error ? error.details[0].message : null;
   };
 
   handleSubmit = (e) => {
@@ -39,22 +53,12 @@ class LoginForm extends Component {
     console.log("Submitted");
   };
 
-  validateProperty = ({name, value}) =>{
-    if(name === 'username') {
-        if(value.trim() === '') return 'Username is required';
-    }
-    
-    if(name === 'password') {
-        if(value.trim() === '') return 'Password is required';
-    }
-  };
-
   handleChange = ({ currentTarget: input }) => {
-    const errors = {...this.state.errors};
+    const errors = { ...this.state.errors };
     const errorMessage = this.validateProperty(input);
-    if(errorMessage) errors[input.name] = errorMessage;
+    if (errorMessage) errors[input.name] = errorMessage;
     else delete errors[input.name];
- 
+
     const account = { ...this.state.account };
     account[input.name] = input.value;
     this.setState({ account, errors });
@@ -66,6 +70,7 @@ class LoginForm extends Component {
     return (
       <div>
         <h1 className="mb-4">Login</h1>
+
         <form onSubmit={this.handleSubmit} className="row row-cols-2 mt-5">
           <Input
             name="username"
@@ -84,8 +89,9 @@ class LoginForm extends Component {
           />
 
           <div className="col">
-            <button className="btn btn-primary col-2">Login</button>
+            <button disabled={this.validate()} className="btn btn-primary col-2">Login</button>
           </div>
+          
         </form>
       </div>
     );
