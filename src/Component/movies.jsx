@@ -112,7 +112,7 @@ class Movies extends Component {
           >
             New Movie
           </Link>
-          <p className="m-5">Showing {totalCount} movies in the database</p>
+          <p className="m-2">Showing {totalCount} movies in the database</p>
 
           <SearchBox value={this.searchQuery} onChange={this.handleSearch} />
 
